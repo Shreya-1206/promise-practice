@@ -15,8 +15,8 @@ const handleSuccess = function (news, source) {
 };
 
 
-const getNewsPromise = new Promise((resolve, reject) => {
- getNews((error, news, source) => {
+const getNewsBackupPromise = new Promise((resolve, reject) => {
+ getNewsBackup((error, news, source) => {
   if (error) return reject(error);
 
     resolve([ news, source ]);
@@ -40,7 +40,7 @@ getNewsBtn.addEventListener('click', function () {
   //   spinner.style.display = 'none';
   // });
 
-  getNewsPromise.then(([news,source]) => handleSuccess(news, source))
+  Promise.any([getNewsPromise(),getNewsBackup()]).then(([news,source]) => handleSuccess(news, source))
   .catch((error) => handleError(error))
 
 });
