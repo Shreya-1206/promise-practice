@@ -23,6 +23,14 @@ const getNewsBackupPromise = new Promise((resolve, reject) => {
  })
 })
 
+const getNewsPromise = new Promise((resolve, reject) => {
+  getNews((error, news, source) => {
+   if (error) return reject(error);
+ 
+     resolve([ news, source ]);
+  })
+ })
+
 
 const handleError = function () {
   errorEl.style.display = 'block';
@@ -40,7 +48,8 @@ getNewsBtn.addEventListener('click', function () {
   //   spinner.style.display = 'none';
   // });
 
-  Promise.any([getNewsPromise(),getNewsBackup()]).then(([news,source]) => handleSuccess(news, source))
+  Promise.any([getNewsPromise, getNewsBackupPromise]).then(([news,source]) => handleSuccess(news, source))
   .catch((error) => handleError(error))
+  .finally(() => spinner.style.display ='none')
 
 });
